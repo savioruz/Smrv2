@@ -56,7 +56,11 @@ const Client = () => {
 
   const handleSearch = async (): Promise<void> => {
     if (!selectedProdi || !selectedDay) {
-      alert('Please select both a study program and a day');
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Please select a study program and a day."
+      })
       return;
     }
 
