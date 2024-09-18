@@ -1,0 +1,26 @@
+---
+import Layout from "../../layouts/Layout.astro"
+const year = new Date().getFullYear()
+---
+<Layout title="GitCharts - GitHub Statistics">
+  <footer class="text-center py-8">
+    <p class="text-sm text-gray-500">
+      {year} © Made with ❤️ by
+        <a href="https://github.com/savioruz/" target="_blank"
+           rel="noopener noreferrer"
+           class="text-black dark:text-gray-100"
+        >
+          savioruz
+        </a>
+    </p>
+    <div class="flex justify-center align-center gap-5 mt-5">
+      <a href="https://trakteer.id/savioruz"target="_blank">
+        <img id="wse-buttons-preview"
+             src="https://cdn.trakteer.id/images/embed/trbtn-red-1.png?date=18-11-2023"
+             style="border:0px;height:36px;"
+             alt="Trakteer Saya" height="40"
+        >
+      </a>
+    </div>
+  </footer>
+</Layout>
