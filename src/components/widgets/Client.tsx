@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button.tsx';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card.tsx"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx"
 import { Label } from '@/components/ui/label.tsx';
 import SearchAutoComplete from '@/components/widgets/SearchAutoComplete.tsx';
 import { DaySelect } from "@/components/widgets/DaySelect.tsx";
 import { fetchData } from "@/lib/fetch.ts";
 import { useToast } from "@/components/hooks/use-toast.ts";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import timeRangesData from '@/lib/time.json';
 
 interface Schedule {
   dosen: string;
@@ -83,29 +80,55 @@ const Client = () => {
     }
   };
 
-  const ResultCard: React.FC<{ result: Schedule }> = ({ result }) => (
-    <Card className="w-full">
-      <CardContent className="pt-6">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <h3 className="font-semibold text-lg">{result.matkul}</h3>
-            <p className="text-sm text-gray-500">{result.kode}</p>
+  const ResultCard: React.FC<{ result: Schedule }> = ({ result }) => {
+    const calculateTimeRange = (jam: string) => {
+      const jamParts = jam.split(',').map(part => parseInt(part.trim()));
+      const startIndex = Math.min(...jamParts) - 1;
+      const endIndex = Math.max(...jamParts) - 1;
+
+      if (startIndex < 0 || endIndex >= timeRangesData.timeRanges.length) {
+        return "Time not available";
+      }
+
+      const startTime = timeRangesData.timeRanges[startIndex].split('-')[0];
+      const endTime = timeRangesData.timeRanges[endIndex].split('-')[1];
+
+      return `${startTime} - ${endTime}`;
+    };
+
+    const timeRange = calculateTimeRange(result.jam);
+
+    return (
+      <Card className="w-full">
+        <CardContent className="pt-6">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <h3 className="font-semibold text-lg">{result.matkul}</h3>
+              <p className="text-sm text-gray-500">{result.kode}</p>
+            </div>
+            <div className="text-right">
+              <p className="font-semibold">{result.hari}</p>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <a className="link">Jam<span className="px-2 ml-2 font-semibold bg-gray-600 text-gray-100 dark:bg-gray-100 dark:text-gray-700">{result.jam}</span></a>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-2">
+                <p>{timeRange}</p>
+                </PopoverContent>
+              </Popover>
+              <p className="text-sm text-gray-500">Ruang {result.ruang}</p>
+            </div>
+            <div className="col-span-2">
+              <p><span className="font-semibold">Dosen:</span> {result.dosen}</p>
+              <p><span className="font-semibold">Kelas:</span> {result.kelas}</p>
+              <p><span className="font-semibold">SKS:</span> {result.sks}</p>
+              <p><span className="font-semibold">Semester:</span> {result.semester}</p>
+            </div>
           </div>
-          <div className="text-right">
-            <p className="font-semibold">{result.hari}</p>
-            <p>Jam<span className="ml-2 font-semibold">{result.jam}</span></p>
-            <p className="text-sm text-gray-500">Ruang {result.ruang}</p>
-          </div>
-          <div className="col-span-2">
-            <p><span className="font-semibold">Dosen:</span> {result.dosen}</p>
-            <p><span className="font-semibold">Kelas:</span> {result.kelas}</p>
-            <p><span className="font-semibold">SKS:</span> {result.sks}</p>
-            <p><span className="font-semibold">Semester:</span> {result.semester}</p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
+        </CardContent>
+      </Card>
+    );
+  };
 
   const SkeletonCard: React.FC = () => (
     <Card className="w-full">
