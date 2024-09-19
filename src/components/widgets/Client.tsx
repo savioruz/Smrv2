@@ -29,22 +29,35 @@ interface ScheduleResponse {
   data: Schedule[];
 }
 
+interface ScheduleState {
+  results: Schedule[] | null;
+  isLoading: boolean;
+  selectedProdi: string;
+  selectedDay: string;
+  searchTerm: string;
+  errorMessage: string | null;
+}
+
+const initialState: ScheduleState = {
+  results: null,
+  isLoading: false,
+  selectedProdi: '',
+  selectedDay: '',
+  searchTerm: '',
+  errorMessage: null,
+};
+
 const Client = () => {
-  const [searchResults, setSearchResults] = React.useState<Schedule[] | null>(null);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [selectedProdi, setSelectedProdi] = React.useState('');
-  const [selectedDay, setSelectedDay] = React.useState('');
-  const [searchTerm, setSearchTerm] = React.useState('');
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const [state, setState] = React.useState<ScheduleState>(initialState);
   const { toast } = useToast()
 
   React.useEffect(() => {
     const handleStudyProgramSelected = (event: CustomEvent<string>) => {
-      setSelectedProdi(event.detail);
+      setState((prevState) => ({ ...prevState, selectedProdi: event.detail }));
     };
 
     const handleDaySelected = (event: CustomEvent<string>) => {
-      setSelectedDay(event.detail);
+      setState(prevState => ({ ...prevState, selectedDay: event.detail }));
     };
 
     document.addEventListener('studyProgramSelected', handleStudyProgramSelected as EventListener);
@@ -57,7 +70,7 @@ const Client = () => {
   }, []);
 
   const handleSearch = async (): Promise<void> => {
-    if (!selectedProdi || !selectedDay) {
+    if (!state.selectedProdi || !state.selectedDay) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -66,24 +79,23 @@ const Client = () => {
       return;
     }
 
-    setIsLoading(true);
-    setErrorMessage(null);
+    setState(prevState => ({ ...prevState, isLoading: true, errorMessage: null }));
     try {
-      const response = await fetchData<ScheduleResponse>(`/schedule?study_programs=${selectedProdi}&day=${selectedDay}`);
-      setSearchResults(response.data);
+      const response = await fetchData<ScheduleResponse>(`/schedule?study_programs=${state.selectedProdi}&day=${state.selectedDay}`);
+      setState(prevState => ({ ...prevState, results: response.data }));
       toast({
         title: "Yay!",
         description: "Data fetched successfully."
       })
     } catch (error) {
-      setSearchResults(null);
+      setState(prevState => ({ ...prevState, errorMessage: null }));
       if (error instanceof Error) {
         const errorMessage = error.message;
         if (errorMessage.includes('status: 404')) {
-          setErrorMessage("No data found.");
+          setState(prevState => ({ ...prevState, errorMessage: "Data not found." }));
           toast({
             title: "Oops!",
-            description: "Data fetched successfully but no data found."
+            description: "Data not found."
           })
         }
       } else {
@@ -94,18 +106,18 @@ const Client = () => {
         })
       }
     } finally {
-      setIsLoading(false);
+      setState(prevState => ({ ...prevState, isLoading: false }));
     }
   };
 
   const filteredResults = React.useMemo(() => {
-    if (!searchResults) return null;
-    return searchResults.filter(result =>
+    if (!state.results) return null;
+    return state.results.filter(result =>
       Object.values(result).some(value =>
-        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        value.toString().toLowerCase().includes(state.searchTerm.toLowerCase())
       )
     );
-  }, [searchResults, searchTerm]);
+  }, [state.results, state.searchTerm]);
 
   const ResultCard: React.FC<{ result: Schedule }> = ({ result }) => {
     const calculateTimeRange = (jam: string) => {
@@ -205,18 +217,18 @@ const Client = () => {
               </Label>
               <DaySelect />
             </div>
-            <Button onClick={handleSearch} disabled={isLoading}>
-              {isLoading ? 'Searching...' : 'Search'}
+            <Button onClick={handleSearch} disabled={state.isLoading}>
+              {state.isLoading ? 'Searching...' : 'Search'}
             </Button>
           </div>
         </CardContent>
       </Card>
 
-      {(isLoading || searchResults || errorMessage) && (
+      {(state.isLoading || state.results || state.errorMessage) && (
         <div className="w-full max-w-[48rem] mt-8 space-y-4">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold">Search Results</h2>
-            {errorMessage ? (
+            {state.errorMessage ? (
               <></>
             ) : (
               <div className="w-2/5 md:w-1/4 flex justify-start relative items-center">
@@ -230,20 +242,20 @@ const Client = () => {
                     "placeholder:text-muted-foreground focus-visible:outline-none pl-10",
                     "disabled:cursor-not-allowed disabled:opacity-50"
                   )}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  value={state.searchTerm}
+                  onChange={(e) => setState(prevState => ({ ...prevState, searchTerm: e.target.value }))}
                 />
               </div>
             )}
           </div>
-          {isLoading ? (
+          {state.isLoading ? (
             <>
               <SkeletonCard/>
               <SkeletonCard/>
               <SkeletonCard/>
             </>
-          ) : errorMessage ? (
-            <p className="text-center text-gray-500">{errorMessage}</p>
+          ) : state.errorMessage ? (
+            <p className="text-center text-gray-500">{state.errorMessage}</p>
           ) : (
             filteredResults?.map((result, index) => (
               <ResultCard key={index} result={result}/>
