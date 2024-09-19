@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx"
 import { Label } from '@/components/ui/label.tsx';
@@ -8,7 +8,10 @@ import { fetchData } from "@/lib/fetch.ts";
 import { useToast } from "@/components/hooks/use-toast.ts";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Input } from "@/components/ui/input.tsx";
+import { SearchIcon } from "lucide-react";
 import timeRangesData from '@/lib/time.json';
+import {cn} from "@/lib/utils.ts";
 
 interface Schedule {
   dosen: string;
@@ -27,13 +30,14 @@ interface ScheduleResponse {
 }
 
 const Client = () => {
-  const [searchResults, setSearchResults] = useState<Schedule[] | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedProdi, setSelectedProdi] = useState('');
-  const [selectedDay, setSelectedDay] = useState('');
+  const [searchResults, setSearchResults] = React.useState<Schedule[] | null>(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [selectedProdi, setSelectedProdi] = React.useState('');
+  const [selectedDay, setSelectedDay] = React.useState('');
+  const [searchTerm, setSearchTerm] = React.useState('');
   const { toast } = useToast()
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleStudyProgramSelected = (event: CustomEvent<string>) => {
       setSelectedProdi(event.detail);
     };
@@ -79,6 +83,15 @@ const Client = () => {
       setIsLoading(false);
     }
   };
+
+  const filteredResults = React.useMemo(() => {
+    if (!searchResults) return null;
+    return searchResults.filter(result =>
+      Object.values(result).some(value =>
+        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+  }, [searchResults, searchTerm]);
 
   const ResultCard: React.FC<{ result: Schedule }> = ({ result }) => {
     const calculateTimeRange = (jam: string) => {
@@ -153,7 +166,6 @@ const Client = () => {
     </Card>
   );
 
-  // @ts-ignore
   return (
     <div className="container mx-auto px-4 py-16 max-w-4xl min-h-[85vh] flex flex-col items-center justify-center">
       <Card className="w-full max-w-[48rem]">
@@ -188,7 +200,24 @@ const Client = () => {
 
       {(isLoading || searchResults) && (
         <div className="w-full max-w-[48rem] mt-8 space-y-4">
-          <h2 className="text-2xl font-bold mb-4">Search Results</h2>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold">Search Results</h2>
+            <div className="w-1/4 flex justify-start relative items-center">
+              <SearchIcon className="absolute ml-3" width={20} height={20} />
+              <Input
+                type="text"
+                placeholder="Filter..."
+                className={cn(
+                  "px-3 py-1 text-sm bg-background shadow-sm transition-colors",
+                  "file:border-0 file:bg-transparent file:text-sm file:font-medium",
+                  "placeholder:text-muted-foreground focus-visible:outline-none pl-10",
+                  "disabled:cursor-not-allowed disabled:opacity-50"
+                )}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
           {isLoading ? (
             <>
               <SkeletonCard />
@@ -196,9 +225,12 @@ const Client = () => {
               <SkeletonCard />
             </>
           ) : (
-            searchResults?.map((result: Schedule, index: React.Key | null | undefined) => (
+            filteredResults?.map((result, index) => (
               <ResultCard key={index} result={result} />
             ))
+          )}
+          {filteredResults && filteredResults.length === 0 && (
+            <p className="text-center text-gray-500">No results found.</p>
           )}
         </div>
       )}
