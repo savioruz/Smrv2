@@ -35,6 +35,7 @@ const Client = () => {
   const [selectedProdi, setSelectedProdi] = React.useState('');
   const [selectedDay, setSelectedDay] = React.useState('');
   const [searchTerm, setSearchTerm] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const { toast } = useToast()
 
   React.useEffect(() => {
@@ -66,6 +67,7 @@ const Client = () => {
     }
 
     setIsLoading(true);
+    setErrorMessage(null);
     try {
       const response = await fetchData<ScheduleResponse>(`/schedule?study_programs=${selectedProdi}&day=${selectedDay}`);
       setSearchResults(response.data);
@@ -74,11 +76,23 @@ const Client = () => {
         description: "Data fetched successfully."
       })
     } catch (error) {
-      console.error('Error fetching data:', error);
-      toast({
-        title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request."
-      })
+      setSearchResults(null);
+      if (error instanceof Error) {
+        const errorMessage = error.message;
+        if (errorMessage.includes('status: 404')) {
+          setErrorMessage("No data found.");
+          toast({
+            title: "Oops!",
+            description: "Data fetched successfully but no data found."
+          })
+        }
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request."
+        })
+      }
     } finally {
       setIsLoading(false);
     }
@@ -198,35 +212,41 @@ const Client = () => {
         </CardContent>
       </Card>
 
-      {(isLoading || searchResults) && (
+      {(isLoading || searchResults || errorMessage) && (
         <div className="w-full max-w-[48rem] mt-8 space-y-4">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold">Search Results</h2>
-            <div className="w-2/5 md:w-1/4 flex justify-start relative items-center">
-              <SearchIcon className="absolute ml-3" width={20} height={20} />
-              <Input
-                type="text"
-                placeholder="Filter..."
-                className={cn(
-                  "px-3 py-1 text-sm bg-background shadow-sm transition-colors",
-                  "file:border-0 file:bg-transparent file:text-sm file:font-medium",
-                  "placeholder:text-muted-foreground focus-visible:outline-none pl-10",
-                  "disabled:cursor-not-allowed disabled:opacity-50"
-                )}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+            {errorMessage ? (
+              <></>
+            ) : (
+              <div className="w-2/5 md:w-1/4 flex justify-start relative items-center">
+                <SearchIcon className="absolute ml-3" width={20} height={20}/>
+                <Input
+                  type="text"
+                  placeholder="Filter..."
+                  className={cn(
+                    "px-3 py-1 text-sm bg-background shadow-sm transition-colors",
+                    "file:border-0 file:bg-transparent file:text-sm file:font-medium",
+                    "placeholder:text-muted-foreground focus-visible:outline-none pl-10",
+                    "disabled:cursor-not-allowed disabled:opacity-50"
+                  )}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            )}
           </div>
           {isLoading ? (
             <>
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
+              <SkeletonCard/>
+              <SkeletonCard/>
+              <SkeletonCard/>
             </>
+          ) : errorMessage ? (
+            <p className="text-center text-gray-500">{errorMessage}</p>
           ) : (
             filteredResults?.map((result, index) => (
-              <ResultCard key={index} result={result} />
+              <ResultCard key={index} result={result}/>
             ))
           )}
           {filteredResults && filteredResults.length === 0 && (
