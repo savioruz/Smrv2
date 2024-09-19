@@ -202,7 +202,7 @@ const Client = () => {
         <div className="w-full max-w-[48rem] mt-8 space-y-4">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold">Search Results</h2>
-            <div className="w-1/4 flex justify-start relative items-center">
+            <div className="w-2/5 md:w-1/4 flex justify-start relative items-center">
               <SearchIcon className="absolute ml-3" width={20} height={20} />
               <Input
                 type="text"
