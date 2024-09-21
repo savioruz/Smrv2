@@ -11,7 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Input } from "@/components/ui/input.tsx";
 import { SearchIcon } from "lucide-react";
 import timeRangesData from '@/lib/time.json';
-import {cn} from "@/lib/utils.ts";
+import { cn } from "@/lib/utils.ts";
 
 interface Schedule {
   dosen: string;
@@ -149,7 +149,12 @@ const Client = () => {
               <p className="font-semibold">{result.hari}</p>
               <Popover>
                 <PopoverTrigger asChild>
-                  <a className="link">Jam<span className="px-2 ml-2 font-semibold bg-gray-600 text-gray-100 dark:bg-gray-100 dark:text-gray-700">{result.jam}</span></a>
+                  <a className="link">
+                    Jam
+                    <span className="px-2 ml-2 font-semibold bg-gray-600 text-gray-100 dark:bg-gray-100 dark:text-gray-700">
+                      {result.jam}
+                    </span>
+                  </a>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-2">
                 <p>{timeRange}</p>
@@ -193,41 +198,43 @@ const Client = () => {
   );
 
   return (
-    <div className="container mx-auto px-4 py-16 max-w-4xl min-h-[85vh] flex flex-col items-center justify-center">
-      <Card className="w-full max-w-[48rem]">
-        <CardHeader>
-          <CardTitle className="text-3xl md:text-5xl font-bold text-center md:mb-8 text-black-50">
-            Smrv2
-            <span className="text-sm md:text-lg block mt-2 font-normal text-gray-400">
-              Sebuah website untuk mencari jadwal kuliah, info ruangan, dll berdasarkan simeru.
-            </span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-5">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="prodi" className="ml-1 block text-sm font-medium dark:text-gray-400">
-                Prodi
-              </Label>
-              <SearchAutoComplete />
+    <main className="container mx-auto px-4 py-4 max-w-3xl min-h-[80vh] flex flex-col justify-center space-y-4">
+      <div className="flex flex-col items-center">
+        <Card className="w-full max-w-3xl">
+          <CardHeader>
+            <CardTitle className="text-3xl md:text-5xl font-bold text-center md:mb-8 text-black-50">
+              Smrv2
+              <span className="text-sm md:text-lg block mt-2 font-normal text-gray-400">
+                Sebuah website untuk mencari jadwal kuliah, info ruangan, dll berdasarkan simeru.
+              </span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="prodi" className="ml-1 block text-sm font-medium dark:text-gray-400">
+                  Prodi
+                </Label>
+                <SearchAutoComplete />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="day" className="ml-1 block text-sm font-medium dark:text-gray-400">
+                  Hari
+                </Label>
+                <DaySelect />
+              </div>
+              <Button onClick={handleSearch} disabled={state.isLoading}>
+                {state.isLoading ? 'Searching...' : 'Search'}
+              </Button>
             </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="day" className="ml-1 block text-sm font-medium dark:text-gray-400">
-                Hari
-              </Label>
-              <DaySelect />
-            </div>
-            <Button onClick={handleSearch} disabled={state.isLoading}>
-              {state.isLoading ? 'Searching...' : 'Search'}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
 
       {(state.isLoading || state.results || state.errorMessage) && (
-        <div className="w-full max-w-[48rem] mt-8 space-y-4">
+        <div className="w-full max-w-3xl mt-8 space-y-4">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold">Search Results</h2>
+            <h2 className="text-lg md:text-2xl font-bold">Search Results</h2>
             {state.errorMessage ? (
               <></>
             ) : (
@@ -266,7 +273,7 @@ const Client = () => {
           )}
         </div>
       )}
-    </div>
+    </main>
   );
 };
 

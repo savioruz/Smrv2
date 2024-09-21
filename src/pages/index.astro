@@ -5,6 +5,9 @@ import Footer from '@/components/widgets/Footer.astro';
 import ScrollUp from '@/components/widgets/ScrollUp';
 import { Toaster } from "@/components/ui/toaster"
 import Client from "@/components/widgets/Client";
+import HealthCheck from "../components/widgets/HealthCheck";
+import {ModeToggle} from "../components/widgets/ModeToggle";
+import React from "react";
 ---
 
 <script is:inline>
@@ -27,6 +30,10 @@ import Client from "@/components/widgets/Client";
 </script>
 
 <Layout title="Smrv2">
+  <header class="container mx-auto px-4 py-4 max-w-3xl flex flex-row justify-between space-y-4">
+    <HealthCheck client:load />
+    <ModeToggle client:load />
+  </header>
   <Client client:load />
   <Footer />
   <ScrollUp client:load />
