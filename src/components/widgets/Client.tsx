@@ -205,7 +205,9 @@ const Client = () => {
             <CardTitle className="text-3xl md:text-5xl font-bold text-center md:mb-8 text-black-50">
               Smrv2
               <span className="text-sm md:text-lg block mt-2 font-normal text-gray-400">
-                Sebuah website untuk mencari jadwal kuliah, info ruangan, dll berdasarkan simeru.
+                Sistem Manajemen Ruang Universitas Ahmad Dahlan
+                <br />
+                Merupakan sebuah website untuk mencari jadwal kuliah, info ruangan, dll berdasarkan simeru.
               </span>
             </CardTitle>
           </CardHeader>

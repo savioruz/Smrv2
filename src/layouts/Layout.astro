@@ -4,6 +4,7 @@ interface Props {
 }
 
 const { title } = Astro.props;
+const description = "Sistem Manajemen Ruang untuk Universitas Ahmad Dahlan (UAD). Kelola jadwal ruang, pemesanan, dan informasi penting seputar manajemen ruang.";
 import '@fontsource-variable/space-grotesk';
 ---
 
@@ -11,15 +12,16 @@ import '@fontsource-variable/space-grotesk';
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Smrv2 - simeru website rework" />
+		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<link rel="canonical" href="https://simeru.uad.ac.id/" />
 
 		<!-- OpenGraph meta tags -->
 		<meta property="og:title" content={title} />
-		<meta property="og:description" content="Smrv2 - simeru website rework" />
+		<meta property="og:description" content={description} />
 		<meta property="og:image" content="/opengraph.png?v=1" />
 		<meta property="og:url" content="https://simeru.vercel.app/" />
 		<meta property="og:type" content="website" />
@@ -27,6 +29,19 @@ import '@fontsource-variable/space-grotesk';
 	<body>
 		<slot />
 	</body>
+	<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "WebSite",
+			"name": "Sistem Manajemen Ruang",
+			"url": "https://simeru.vercel.app",
+			"description": "Sistem Manajemen Ruang Universitas Ahmad Dahlan (UAD) untuk pengelolaan ruang dan jadwal.",
+			"author": {
+				"@type": "Organization",
+				"name": "Universitas Ahmad Dahlan"
+			}
+		}
+	</script>
 </html>
 <style is:global>
 	:root {
