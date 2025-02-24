@@ -59,7 +59,7 @@
 		{#snippet child({ props })}
 			<Button
 				variant="outline"
-				class={cn('justify-between', buttonClass, { 
+				class={cn('justify-between', buttonClass, {
 					'text-muted-foreground': !selectedValue,
 					'border-destructive': showError
 				})}

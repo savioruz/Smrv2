@@ -162,6 +162,7 @@
 				hasMore = false;
 			}
 		} catch (err) {
+			console.error('Error searching schedules:', err);
 			error = true;
 			errorMessage = 'Gagal mengambil data jadwal.';
 			hasMore = false;
@@ -369,8 +370,8 @@
 	</div>
 	<div class="flex w-full flex-col items-center justify-center gap-4">
 		{#if loading}
-			{#each Array(4) as _}
-				<SkeletonCard />
+			{#each Array(4) as id}
+				<SkeletonCard {id} />
 			{/each}
 		{:else if schedules.length > 0}
 			<div class="flex w-full max-w-xl items-center justify-between px-2">
@@ -403,7 +404,7 @@
 				{#if hasMore && !filterQuery}
 					<div bind:this={bottomElement} class="flex w-full justify-center py-4">
 						{#if loadingMore}
-							<SkeletonCard />
+							<SkeletonCard id={0} />
 						{/if}
 					</div>
 				{/if}

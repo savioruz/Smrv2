@@ -20,6 +20,7 @@
 			href="/"
 			data-sveltekit-preload-data
 			class="relative inline-block text-lg after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-bottom-right after:scale-x-0 after:bg-gradient-to-r after:from-purple-500 after:to-white after:transition-transform after:duration-300 after:ease-in-out hover:after:origin-bottom-left hover:after:scale-x-100"
-			>&larr; Go back home</a>
+			>&larr; Go back home</a
+		>
 	</div>
 </div>

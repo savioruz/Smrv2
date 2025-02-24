@@ -22,8 +22,8 @@
 
 <Button
 	class={cn(
-		'fixed bottom-4 right-4 p-2 shadow-md transition-all duration-300 z-50',
-		!visible && 'opacity-0 pointer-events-none translate-y-16'
+		'fixed bottom-4 right-4 z-50 p-2 shadow-md transition-all duration-300',
+		!visible && 'pointer-events-none translate-y-16 opacity-0'
 	)}
 	variant="secondary"
 	size="icon"

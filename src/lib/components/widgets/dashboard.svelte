@@ -67,7 +67,7 @@
 			</span>
 		</div>
 		{#if loading}
-			<SkeletonCard />
+			<SkeletonCard id={0} />
 		{:else if currentAndUpcomingSchedules.length > 0}
 			{#each currentAndUpcomingSchedules as schedule}
 				<Card
@@ -114,8 +114,8 @@
 			</form>
 		</div>
 		{#if loading}
-			{#each Array(2) as _}
-				<SkeletonCard />
+			{#each Array(2) as id}
+				<SkeletonCard {id} />
 			{/each}
 		{:else if schedules.length > 0}
 			{#each schedules as schedule}

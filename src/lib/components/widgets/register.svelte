@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Root from "./root.svelte";
-    import BorderBeam from '$lib/components/ui/border-beam/border-beam.svelte';
+	import Root from './root.svelte';
+	import BorderBeam from '$lib/components/ui/border-beam/border-beam.svelte';
 	import { registerSchema, type RegisterSchema } from '$lib/schemas/auth';
 	import * as Form from '$lib/components/ui/form';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
@@ -10,10 +10,10 @@
 	import { Loader2 } from 'lucide-svelte';
 	import CircleAlert from 'lucide-svelte/icons/circle-alert';
 	import * as Alert from '$lib/components/ui/alert/index.js';
-    import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import { goto } from '$app/navigation';
 
-    let isOpen = false;
+	let isOpen = false;
 
 	interface Props {
 		data: {
@@ -67,7 +67,7 @@
 </script>
 
 <Root>
-    <div
+	<div
 		class="relative flex max-w-lg flex-col items-start justify-between gap-4 rounded-3xl border border-gray-700/70 bg-background p-7"
 	>
 		<BorderBeam size={150} duration={12} colorFrom="#9c40ff" colorTo="#f8fafc" />
@@ -138,13 +138,15 @@
 						<AlertDialog.Header>
 							<AlertDialog.Title>Apakah Anda yakin?</AlertDialog.Title>
 							<AlertDialog.Description>
-								Pastikan data yang Anda masukkan sudah sesuai dengan data yang ada di portal.
-								Karena sistem smrv2 dibangun berdasarkan data dari portal,<strong> maka data yang Anda masukkan harus sesuai dengan data yang ada di portal</strong>.
+								Pastikan data yang Anda masukkan sudah sesuai dengan data yang ada di portal. Karena
+								sistem smrv2 dibangun berdasarkan data dari portal,<strong>
+									maka data yang Anda masukkan harus sesuai dengan data yang ada di portal</strong
+								>.
 							</AlertDialog.Description>
 						</AlertDialog.Header>
 						<AlertDialog.Footer>
 							<AlertDialog.Cancel>Batal</AlertDialog.Cancel>
-							<AlertDialog.Action 
+							<AlertDialog.Action
 								onclick={() => {
 									isOpen = false;
 									form.submit();

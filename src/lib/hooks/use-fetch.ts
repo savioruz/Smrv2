@@ -1,13 +1,15 @@
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-async function refreshToken(refreshToken: string): Promise<{ access_token: string; refresh_token: string } | null> {
+async function refreshToken(
+	refreshToken: string
+): Promise<{ access_token: string; refresh_token: string } | null> {
 	try {
 		const response = await fetch(`${baseUrl}/auth/refresh`, {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json',
+				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ refresh_token: refreshToken }),
+			body: JSON.stringify({ refresh_token: refreshToken })
 		});
 
 		if (!response.ok) {
@@ -21,15 +23,19 @@ async function refreshToken(refreshToken: string): Promise<{ access_token: strin
 	}
 }
 
-export async function useFetch<T>(url: string, options: RequestInit, accessToken?: string): Promise<T> {
+export async function useFetch<T>(
+	url: string,
+	options: RequestInit,
+	accessToken?: string
+): Promise<T> {
 	try {
 		const response = await fetch(`${baseUrl}${url}`, {
 			...options,
 			mode: 'cors',
 			headers: {
 				'Content-Type': 'application/json',
-				'Accept': 'application/json',
-				...(accessToken && { 'Authorization': `Bearer ${accessToken}` }),
+				Accept: 'application/json',
+				...(accessToken && { Authorization: `Bearer ${accessToken}` }),
 				...options.headers
 			}
 		});
@@ -39,7 +45,7 @@ export async function useFetch<T>(url: string, options: RequestInit, accessToken
 			// Get refresh token from cookies
 			const refreshTokenCookie = document.cookie
 				.split('; ')
-				.find(row => row.startsWith('refresh_token='))
+				.find((row) => row.startsWith('refresh_token='))
 				?.split('=')[1];
 
 			if (refreshTokenCookie) {
@@ -55,8 +61,8 @@ export async function useFetch<T>(url: string, options: RequestInit, accessToken
 						mode: 'cors',
 						headers: {
 							'Content-Type': 'application/json',
-							'Accept': 'application/json',
-							'Authorization': `Bearer ${tokens.access_token}`,
+							Accept: 'application/json',
+							Authorization: `Bearer ${tokens.access_token}`,
 							...options.headers
 						}
 					});

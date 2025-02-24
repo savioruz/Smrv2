@@ -39,7 +39,7 @@
 	on:mousemove={handleMouseMove}
 	on:mouseleave={handleMouseLeave}
 	class={cn(
-		'hover:border-purple/50 group relative flex flex-col overflow-hidden rounded-lg border bg-card text-card-foreground transition-all duration-300 ease-out w-full',
+		'hover:border-purple/50 group relative flex w-full flex-col overflow-hidden rounded-lg border bg-card text-card-foreground transition-all duration-300 ease-out',
 		className
 	)}
 >
@@ -47,9 +47,9 @@
 		<Collapsible.Trigger class="w-full">
 			<!-- Card Header -->
 			<div class="flex flex-col p-4">
-				<div class="flex items-center justify-between w-full">
+				<div class="flex w-full items-center justify-between">
 					<div class="flex flex-col items-start justify-center gap-1">
-						<h3 class="text-md my-1 font-semibold line-clamp-1">{schedule.course_name}</h3>
+						<h3 class="text-md my-1 line-clamp-1 font-semibold">{schedule.course_name}</h3>
 						<div class="flex items-center gap-2">
 							<p class="text-sm text-foreground">
 								Kelas {schedule.class_code}

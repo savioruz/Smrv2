@@ -7,7 +7,7 @@ export const load: PageServerLoad = async () => {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
-				'Accept': 'application/json'
+				Accept: 'application/json'
 			}
 		});
 
@@ -18,10 +18,11 @@ export const load: PageServerLoad = async () => {
 		const studyProgramResponse: StudyProgramsResponse = await response.json();
 
 		return {
-			studyPrograms: studyProgramResponse?.data?.map((program: StudyProgram) => ({
-				label: program.name,
-				value: program.name
-			})) || []
+			studyPrograms:
+				studyProgramResponse?.data?.map((program: StudyProgram) => ({
+					label: program.name,
+					value: program.name
+				})) || []
 		};
 	} catch (error) {
 		console.error('Error fetching study programs:', error);

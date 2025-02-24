@@ -6,4 +6,4 @@ export const POST: RequestHandler = async ({ cookies }) => {
 	cookies.delete('refresh_token', { path: '/' });
 
 	return json({ success: true });
-}; 
+};

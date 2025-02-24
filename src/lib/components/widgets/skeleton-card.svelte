@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { Skeleton } from '$lib/components/ui/skeleton';
+	export let id: number;
 </script>
 
-<div class="group relative flex w-full max-w-xl flex-col overflow-hidden rounded-lg border bg-card">
+<div
+	class="group relative flex w-full max-w-xl flex-col overflow-hidden rounded-lg border bg-card"
+	id={id.toString()}
+>
 	<div class="flex flex-col gap-4 p-4">
 		<Skeleton class="h-[30px] w-3/4 rounded-lg" />
 		<div class="flex flex-col gap-3">

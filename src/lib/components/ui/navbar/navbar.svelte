@@ -27,7 +27,7 @@
 >
 	<nav class="container flex h-14 items-center justify-between">
 		<div class="flex items-center md:gap-6">
-			<a href="/" class="text-md md:text-lg font-bold" data-sveltekit-preload-data>smrv2</a>
+			<a href="/" class="text-md font-bold md:text-lg" data-sveltekit-preload-data>smrv2</a>
 		</div>
 		<div class="flex items-center gap-1 md:gap-4">
 			{#if $page.data.isAuthenticated}
