@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Root from './root.svelte';
 	import BorderBeam from '$lib/components/ui/border-beam/border-beam.svelte';
-	import { registerSchema, type RegisterSchema } from '$lib/schemas/auth';
+	import { resetPasswordSchema, type ResetPasswordSchema } from '$lib/schemas/auth';
 	import * as Form from '$lib/components/ui/form';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
@@ -18,7 +18,7 @@
 
 	interface Props {
 		data: {
-			form: SuperValidated<Infer<RegisterSchema>>;
+			form: SuperValidated<Infer<ResetPasswordSchema>>;
 			error?: string;
 			message?: string;
 		};
@@ -27,7 +27,7 @@
 	export let data: Props['data'];
 
 	const form = superForm(data.form, {
-		validators: zodClient(registerSchema),
+		validators: zodClient(resetPasswordSchema),
 		onResult: ({ result }) => {
 			if (result.type === 'success') {
 				if (result.data?.location) {
@@ -35,7 +35,7 @@
 				} else if (result.data?.message) {
 					message = result.data.message;
 					error = undefined;
-					$formData.email = '';
+					$formData.token = '';
 					$formData.password = '';
 					$formData.confirmPassword = '';
 				}
@@ -77,9 +77,9 @@
 		<BorderBeam size={150} duration={12} colorFrom="#9c40ff" colorTo="#f8fafc" />
 		<div class="my-4 flex gap-2">
 			<div class="flex flex-col items-center justify-center gap-2">
-				<h1 class="text-4xl font-bold">Daftar</h1>
+				<h1 class="text-4xl font-bold">Reset Password</h1>
 				<p class="text-md text-muted-foreground">
-					Daftar untuk mengakses fitur-fitur yang ada di smrv2
+					Reset password untuk bisa login ke smrv2 dan mengakses fitur-fitur yang ada di smrv2
 				</p>
 			</div>
 		</div>
@@ -100,20 +100,16 @@
 			{/if}
 
 			<form method="POST" use:enhance class="flex flex-col gap-4" on:submit|preventDefault>
-				<Form.Field {form} name="email">
-					<Form.Control>
-						{#snippet children({ props })}
-							<Form.Label>Email</Form.Label>
-							<Input type="email" {...props} bind:value={$formData.email} />
-						{/snippet}
-					</Form.Control>
-					<Form.FieldErrors />
-				</Form.Field>
+                <Form.Field {form} name="token">
+                    <Form.Control>
+                        <Input type="hidden" bind:value={$formData.token} name="token" />
+                    </Form.Control>
+                </Form.Field>
 				<Form.Field {form} name="password">
 					<Form.Control>
 						{#snippet children({ props })}
 						<Form.Label class="flex items-center justify-between">
-							Password
+							Password Baru
 							<Button
 								variant="ghost"
 								size="icon"
@@ -140,7 +136,7 @@
 					<Form.Control>
 						{#snippet children({ props })}
 							<Form.Label class="flex items-center justify-between">
-								Konfirmasi Password
+								Konfirmasi Password Baru
 								<Button
 									variant="ghost"
 									size="icon"
@@ -174,7 +170,7 @@
 								<Loader2 class="mr-2 h-4 w-4 animate-spin" />
 								<span>Loading...</span>
 							{:else}
-								Daftar
+								Reset
 							{/if}
 						</Button>
 					</AlertDialog.Trigger>
@@ -196,7 +192,7 @@
 									form.submit();
 								}}
 							>
-								Daftar
+								Reset
 							</AlertDialog.Action>
 						</AlertDialog.Footer>
 					</AlertDialog.Content>

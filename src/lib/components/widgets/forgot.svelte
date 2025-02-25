@@ -1,34 +1,56 @@
 <script lang="ts">
 	import Root from './root.svelte';
 	import BorderBeam from '$lib/components/ui/border-beam/border-beam.svelte';
-	import { loginSchema, type LoginSchema } from '$lib/schemas/auth';
+	import { forgotPasswordSchema, type ForgotPasswordSchema } from '$lib/schemas/auth';
 	import * as Form from '$lib/components/ui/form';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
-	import { Loader2, Eye, EyeOff, CircleAlert } from 'lucide-svelte';
+	import { Loader2, CircleAlert } from 'lucide-svelte';
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { goto } from '$app/navigation';
 
-	let isShowPassword = false;
-
 	interface Props {
 		data: {
-			form: SuperValidated<Infer<LoginSchema>>;
+			form: SuperValidated<Infer<ForgotPasswordSchema>>;
 			error?: string;
+			message?: string;
 		};
 	}
 
 	export let data: Props['data'];
 
+
+	let timer = 0;
+	let isTimerActive = false;
+
+	const startTimer = () => {
+		isTimerActive = true;
+		timer = 90;
+		const interval = setInterval(() => {
+			timer--;
+			if (timer <= 0) {
+				clearInterval(interval);
+				isTimerActive = false;
+			}
+		}, 1000);
+	};
+
 	const form = superForm(data.form, {
-		validators: zodClient(loginSchema),
+		validators: zodClient(forgotPasswordSchema),
 		onResult: ({ result }) => {
-			if (result.type === 'success' && result.data?.location) {
-				goto(result.data.location);
+			if (result.type === 'success') {
+				if (result.data?.location) {
+					goto(result.data.location);
+				} else if (result.data?.message) {
+					message = result.data.message;
+					error = undefined;
+					startTimer(); 
+				}
 			} else if (result.type === 'failure') {
 				error = result.data?.error || 'An error occurred';
+				message = undefined;
 			}
 		},
 		onError: ({ result }) => {
@@ -43,9 +65,15 @@
 
 	const { form: formData, enhance, submitting } = form;
 	let error = data.error;
+	let message = data.message;
 
 	$: if (data.error) {
 		error = data.error;
+		message = undefined;
+	}
+	$: if (data.message) {
+		message = data.message;
+		error = undefined;
 	}
 </script>
 
@@ -56,9 +84,9 @@
 		<BorderBeam size={150} duration={12} colorFrom="#9c40ff" colorTo="#f8fafc" />
 		<div class="my-4 flex gap-2">
 			<div class="flex flex-col items-center justify-center gap-2">
-				<h1 class="text-4xl font-bold">Login</h1>
+				<h1 class="text-4xl font-bold">Reset Password</h1>
 				<p class="text-md text-muted-foreground">
-					Login untuk mengakses fitur-fitur yang ada di smrv2
+					Masukkan email untuk mereset password
 				</p>
 			</div>
 		</div>
@@ -69,6 +97,12 @@
 					<CircleAlert class="size-4" />
 					<Alert.Title>Error</Alert.Title>
 					<Alert.Description>{error}</Alert.Description>
+				</Alert.Root>
+			{:else if message}
+				<Alert.Root variant="default">
+					<CircleAlert class="size-4" />
+					<Alert.Title>Berhasil</Alert.Title>
+					<Alert.Description>{message}</Alert.Description>
 				</Alert.Root>
 			{/if}
 
@@ -83,44 +117,14 @@
 					<Form.Description />
 					<Form.FieldErrors />
 				</Form.Field>
-				<Form.Field {form} name="password">
-					<Form.Control>
-						{#snippet children({ props })}
-							<Form.Label class="flex items-center justify-between">
-								Password
-								<Button
-									variant="ghost"
-									size="icon"
-									onclick={() => {
-										isShowPassword = !isShowPassword;
-										setTimeout(() => {
-											isShowPassword = false;
-										}, 1500);
-									}}
-								>
-									{#if isShowPassword}
-										<EyeOff class="size-4" />
-									{:else}
-										<Eye class="size-4" />
-									{/if}
-								</Button>
-							</Form.Label>
-							<Input
-								type={isShowPassword ? 'text' : 'password'}
-								{...props}
-								bind:value={$formData.password}
-							/>
-						{/snippet}
-					</Form.Control>
-					<Form.Description />
-					<Form.FieldErrors />
-				</Form.Field>
-				<Button type="submit" disabled={$submitting} class="w-full">
+				<Button type="submit" disabled={$submitting || isTimerActive} class="w-full">
 					{#if $submitting}
 						<Loader2 class="mr-2 h-4 w-4 animate-spin" />
 						<span>Loading...</span>
+					{:else if isTimerActive}
+						Tunggu {timer} detik
 					{:else}
-						Login
+						Kirim
 					{/if}
 				</Button>
 			</form>
@@ -133,14 +137,6 @@
 					data-sveltekit-preload-data
 					class="relative inline-block text-lg text-slate-900 after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-bottom-right after:scale-x-0 after:bg-gradient-to-r after:from-purple-500 after:to-white after:transition-transform after:duration-300 after:ease-in-out hover:after:origin-bottom-left hover:after:scale-x-100 dark:text-slate-100"
 					>Daftar</a
-				>
-			</p>
-			<p class="text-md text-muted-foreground">
-				<a
-					href="/auth/forgot"
-					data-sveltekit-preload-data
-					class="relative inline-block text-lg text-slate-900 after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-bottom-right after:scale-x-0 after:bg-gradient-to-r after:from-purple-500 after:to-white after:transition-transform after:duration-300 after:ease-in-out hover:after:origin-bottom-left hover:after:scale-x-100 dark:text-slate-100"
-					>Lupa password?</a
 				>
 			</p>
 		</div>
