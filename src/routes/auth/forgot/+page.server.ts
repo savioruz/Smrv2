@@ -10,7 +10,7 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const ERROR_MESSAGES: Record<string, string> = {
 	INVALID_EMAIL: 'Format email tidak valid',
-	NOT_FOUND: 'Pengguna tidak ditemukan',
+	NOT_FOUND: 'Pengguna tidak ditemukan'
 };
 
 export const load: PageServerLoad = async () => {

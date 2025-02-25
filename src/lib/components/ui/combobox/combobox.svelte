@@ -65,6 +65,7 @@
 				})}
 				{...props}
 				role="combobox"
+				aria-label={placeholder}
 				aria-expanded={open}
 				aria-required={required}
 			>
