@@ -21,7 +21,6 @@
 
 	export let data: Props['data'];
 
-
 	let timer = 0;
 	let isTimerActive = false;
 
@@ -46,7 +45,7 @@
 				} else if (result.data?.message) {
 					message = result.data.message;
 					error = undefined;
-					startTimer(); 
+					startTimer();
 				}
 			} else if (result.type === 'failure') {
 				error = result.data?.error || 'An error occurred';
@@ -85,9 +84,7 @@
 		<div class="my-4 flex gap-2">
 			<div class="flex flex-col items-center justify-center gap-2">
 				<h1 class="text-4xl font-bold">Reset Password</h1>
-				<p class="text-md text-muted-foreground">
-					Masukkan email untuk mereset password
-				</p>
+				<p class="text-md text-muted-foreground">Masukkan email untuk mereset password</p>
 			</div>
 		</div>
 

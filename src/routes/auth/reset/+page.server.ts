@@ -11,30 +11,30 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const ERROR_MESSAGES: Record<string, string> = {
 	PASSWORD_MISMATCH: 'Password tidak sama',
 	INVALID: 'Token tidak valid',
-    NOT_FOUND: 'User tidak ditemukan',
-    REQUIRED: 'Token tidak boleh kosong'
+	NOT_FOUND: 'User tidak ditemukan',
+	REQUIRED: 'Token tidak boleh kosong'
 };
 
 export const load: PageServerLoad = async ({ url }) => {
 	const form = await superValidate(zod(resetPasswordSchema));
-    const token = url.searchParams.get('id');
+	const token = url.searchParams.get('id');
 
-    if (!token) {
-        throw fail(400, {
-            form,
-            error: 'Token tidak valid'
-        });
-    }
+	if (!token) {
+		throw fail(400, {
+			form,
+			error: 'Token tidak valid'
+		});
+	}
 
 	return {
-        form: {
-            ...form,
-            data: {
-                ...form.data,
-                token: token
-            }
-        }
-    };
+		form: {
+			...form,
+			data: {
+				...form.data,
+				token: token
+			}
+		}
+	};
 };
 
 export const actions: Actions = {

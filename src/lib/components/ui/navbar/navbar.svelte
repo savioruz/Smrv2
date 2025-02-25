@@ -52,6 +52,7 @@
 					href="/auth/login"
 					variant={$page.url.pathname === '/auth/login' ? 'outline' : 'ghost'}
 					data-sveltekit-preload-data="hover"
+					aria-label="Login"
 				>
 					<User />
 				</Button>

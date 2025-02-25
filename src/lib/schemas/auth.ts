@@ -38,4 +38,3 @@ export const forgotPasswordSchema = z.object({
 });
 
 export type ForgotPasswordSchema = typeof forgotPasswordSchema;
-

@@ -112,26 +112,30 @@
 				<Form.Field {form} name="password">
 					<Form.Control>
 						{#snippet children({ props })}
-						<Form.Label class="flex items-center justify-between">
-							Password
-							<Button
-								variant="ghost"
-								size="icon"
-								onclick={() => {
-									isShowPassword = !isShowPassword;
-									setTimeout(() => {
-										isShowPassword = false;
-									}, 1500);
-								}}
-							>
-								{#if isShowPassword}
-									<EyeOff class="size-4" />
-								{:else}
-									<Eye class="size-4" />
-								{/if}
-							</Button>
-						</Form.Label>
-							<Input type={isShowPassword ? 'text' : 'password'} {...props} bind:value={$formData.password} />
+							<Form.Label class="flex items-center justify-between">
+								Password
+								<Button
+									variant="ghost"
+									size="icon"
+									onclick={() => {
+										isShowPassword = !isShowPassword;
+										setTimeout(() => {
+											isShowPassword = false;
+										}, 1500);
+									}}
+								>
+									{#if isShowPassword}
+										<EyeOff class="size-4" />
+									{:else}
+										<Eye class="size-4" />
+									{/if}
+								</Button>
+							</Form.Label>
+							<Input
+								type={isShowPassword ? 'text' : 'password'}
+								{...props}
+								bind:value={$formData.password}
+							/>
 						{/snippet}
 					</Form.Control>
 					<Form.FieldErrors />
