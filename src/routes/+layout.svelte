@@ -17,7 +17,7 @@
 	<meta name="keywords" content={siteConfig.keywords} />
 	<meta name="author" content={siteConfig.name} />
 
-	<meta property="og:title" content="{siteConfig.name}" />
+	<meta property="og:title" content={siteConfig.name} />
 	<meta property="og:description" content={siteConfig.description} />
 	<meta property="og:type" content="website" />
 	<meta property="og:locale" content="en_US" />

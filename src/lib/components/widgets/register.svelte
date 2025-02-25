@@ -34,6 +34,9 @@
 				} else if (result.data?.message) {
 					message = result.data.message;
 					error = undefined;
+					$formData.email = '';
+					$formData.password = '';
+					$formData.confirmPassword = '';
 				}
 			} else if (result.type === 'failure') {
 				error = result.data?.error || 'An error occurred';
