@@ -7,13 +7,14 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
-	import { Loader2 } from 'lucide-svelte';
-	import CircleAlert from 'lucide-svelte/icons/circle-alert';
+	import { Loader2, Eye, EyeOff, CircleAlert } from 'lucide-svelte';
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import { goto } from '$app/navigation';
 
 	let isOpen = false;
+	let isShowPassword = false;
+	let isShowConfirmPassword = false;
 
 	interface Props {
 		data: {
@@ -111,8 +112,26 @@
 				<Form.Field {form} name="password">
 					<Form.Control>
 						{#snippet children({ props })}
-							<Form.Label>Password</Form.Label>
-							<Input type="password" {...props} bind:value={$formData.password} />
+						<Form.Label class="flex items-center justify-between">
+							Password
+							<Button
+								variant="ghost"
+								size="icon"
+								onclick={() => {
+									isShowPassword = !isShowPassword;
+									setTimeout(() => {
+										isShowPassword = false;
+									}, 1500);
+								}}
+							>
+								{#if isShowPassword}
+									<EyeOff class="size-4" />
+								{:else}
+									<Eye class="size-4" />
+								{/if}
+							</Button>
+						</Form.Label>
+							<Input type={isShowPassword ? 'text' : 'password'} {...props} bind:value={$formData.password} />
 						{/snippet}
 					</Form.Control>
 					<Form.FieldErrors />
@@ -120,8 +139,30 @@
 				<Form.Field {form} name="confirmPassword">
 					<Form.Control>
 						{#snippet children({ props })}
-							<Form.Label>Konfirmasi Password</Form.Label>
-							<Input type="password" {...props} bind:value={$formData.confirmPassword} />
+							<Form.Label class="flex items-center justify-between">
+								Konfirmasi Password
+								<Button
+									variant="ghost"
+									size="icon"
+									onclick={() => {
+										isShowConfirmPassword = !isShowConfirmPassword;
+										setTimeout(() => {
+											isShowConfirmPassword = false;
+										}, 1500);
+									}}
+								>
+									{#if isShowConfirmPassword}
+										<EyeOff class="size-4" />
+									{:else}
+										<Eye class="size-4" />
+									{/if}
+								</Button>
+							</Form.Label>
+							<Input
+								type={isShowConfirmPassword ? 'text' : 'password'}
+								{...props}
+								bind:value={$formData.confirmPassword}
+							/>
 						{/snippet}
 					</Form.Control>
 					<Form.FieldErrors />
