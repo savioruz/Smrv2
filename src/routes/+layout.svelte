@@ -9,7 +9,7 @@
 </script>
 
 <svelte:head>
-	<title>{siteConfig.name} - Personal Website</title>
+	<title>{siteConfig.name}</title>
 	<meta name="description" content={siteConfig.description} />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta charset="utf-8" />
@@ -17,7 +17,7 @@
 	<meta name="keywords" content={siteConfig.keywords} />
 	<meta name="author" content={siteConfig.name} />
 
-	<meta property="og:title" content="{siteConfig.name} - Personal Website" />
+	<meta property="og:title" content="{siteConfig.name}" />
 	<meta property="og:description" content={siteConfig.description} />
 	<meta property="og:type" content="website" />
 	<meta property="og:locale" content="en_US" />
