@@ -218,14 +218,14 @@
 			> ✨.</span
 		>
 		<span>
-			Jika terdapat kendala mengenai website ini, silahkan hubungi saya melalui email
-			<a href="mailto:kherr.riil@gmail.com" class="text-blue-500 hover:underline">
-				kherr.riil@gmail.com
+			Jika terdapat kendala mengenai website ini, silahkan submit issue melalui
+			<a href="https://github.com/savioruz/smrv2/issues" class="text-blue-500 hover:underline">
+				GitHub.
 			</a>
-			atau
+			atau bisa langsung hubungi saya melalui
 			<a href="https://t.me/savioruz" class="text-blue-500 hover:underline">Telegram.</a>
 		</span>
-		<span>Terima kasih ! 🙂</span>
+		<span>Terima kasih sudah menggunakan website ini! 🙂</span>
 	</div>
 </Marquee>
 <Root class="flex min-h-[calc(100vh-10rem)] flex-col gap-8">
